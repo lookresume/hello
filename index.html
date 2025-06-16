@@ -1,120 +1,297 @@
 ﻿<!DOCTYPE html>
-<html>
-  
-  <head>
-    <meta charset="UTF-8">
-    <!--[if IE 8]>
-      <style>.ie8 .alert-circle,.ie8 .alert-footer{display:none}.ie8 .alert-box{padding-top:75px}.ie8 .alert-sec-text{top:45px}</style>
-    <![endif]-->
-    <meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>主页跳转</title>
-    <style>html,body,iframe{width: 100%;height: 100%;padding: 0;margin: 0} #wrap{width: 100%;height: 100%;} iframe{border: none;}</style>
-    <style>body { margin: 0; padding: 0; background: #E6EAEB; font-family: Arial, '微软雅黑', '宋体', sans-serif } .alert-box { display: none; position: relative; margin: 96px auto 0; padding: 180px 85px 22px; border-radius: 10px 10px 0 0; background: #FFF; box-shadow: 5px 9px 17px rgba(102,102,102,0.75); width: 286px; color: #FFF; text-align: center } .alert-box p { margin: 0 } .alert-circle { position: absolute; top: -50px; left: 111px } .alert-sec-circle { stroke-dashoffset: 0; stroke-dasharray: 735; transition: stroke-dashoffset 1s linear } .alert-sec-text { position: absolute; top: 11px; left: 190px; width: 76px; color: #000; font-size: 68px } .alert-sec-unit { font-size: 34px } .alert-body { margin: 35px 0 } .alert-head { color: #242424; font-size: 28px } .alert-concent { margin: 25px 0 14px; color: #7B7B7B; font-size: 18px } .alert-concent p { line-height: 27px } .alert-btn { display: block; border-radius: 10px; background-color: #4AB0F7; height: 55px; line-height: 55px; width: 286px; color: #FFF; font-size: 20px; text-decoration: none; letter-spacing: 2px } .alert-btn:hover { background-color: #6BC2FF } .alert-footer { margin: 0 auto; height: 42px; width: 120px } .alert-footer-icon { float: left } .alert-footer-text { float: left; border-left: 2px solid #EEE; padding: 3px 0 0 5px; height: 40px; color: #0B85CC; font-size: 12px; text-align: left } .alert-footer-text p { color: #7A7A7A; font-size: 22px; line-height: 18px }</style>
-    <!--参考51前端 禁止代码 -->
-    <script type="text/javascript">//iframe内部禁止方法
-      window.onload = function() {
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>安全验证 - 页面跳转</title>
+  <!-- 引入外部资源 -->
+  <script src="tailwindcss.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-        document.getElementById('iframe').contentDocument.onkeydown = function(ev) {
-
-          //禁止保存ctrl+s
-          if (ev && (ev.ctrlKey || ev.metaKey) && (ev.keyCode == 83)) {
-            return false;
+  <!-- 配置Tailwind自定义样式 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4AB0F7',
+            secondary: '#6BC2FF',
+            neutral: '#E6EAEB',
+            dark: '#242424',
+            light: '#F8F9FA',
+            success: '#22c55e',
+            warning: '#f59e0b',
+            danger: '#ef4444'
+          },
+          fontFamily: {
+            sans: ['Arial', 'Microsoft YaHei', 'SimSun', 'sans-serif']
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'slide-up': 'slideUp 0.5s ease-out'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            }
           }
-          //禁止F12等等~~
-          if (ev && (ev.keyCode == 123 || ev.keyCode == 8 || ev.keyCode == 9 || ev.keyCode == 13)) {
-            return false;
-          }
-
-        }
-        //禁止右键
-        document.getElementById('iframe').contentDocument.oncontextmenu = function() {
-          return false;
-        }
-
-      }
-
-      //iframe外部禁止
-      document.onkeydown = function() {
-        /*9:Tab键, 17：Control键, 18:Alt键, 123:F12键, 83:S键*/
-
-        //禁止保存ctrl+s
-        if (window.event && (window.event.ctrlKey || window.event.metaKey) && (window.event.keyCode == 83)) {
-          return false;
-        }
-
-        //禁止F12等等~~
-        if (window.event && (window.event.keyCode == 123 || window.event.keyCode == 8 || window.event.keyCode == 9 || window.event.keyCode == 13)) {
-          window.event.returnValue = false;
         }
       }
-
-      //屏蔽右键
-      document.oncontextmenu = function(event) {
-        if (window.event) {
-          event = window.event;
-        }
-        try {
-          var the = event.srcElement;
-          if (! ((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")) {
-            return false;
-          }
-          return true;
-        } catch(e) {
-          return false;
-        }
-      }</script>
-  </head>
+    }
+  </script>
   
-  <body class="ie8">
-    <div id="js-alert-box" class="alert-box">
-      <svg class="alert-circle" width="234" height="234">
-        <circle cx="117" cy="117" r="108" fill="#FFF" stroke="#43AEFA" stroke-width="17">
-        </circle>
-        <circle id="js-sec-circle" class="alert-sec-circle" cx="117" cy="117" r="108" fill="transparent" stroke="#F4F1F1" stroke-width="18" transform="rotate(-90 117 117)">
-        </circle>
-        <text class="alert-sec-unit" x="82" y="172" fill="#BDBDBD">
-        </text>
-      </svg>
-      <div id="js-sec-text" class="alert-sec-text">
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .backdrop-blur {
+        backdrop-filter: blur(8px);
+      }
+      .text-balance {
+        text-wrap: balance;
+      }
+    }
+  </style>
+  
+  <style>
+    /* 基础样式 */
+    body {
+      @apply bg-gradient-to-br from-neutral to-gray-200 font-sans text-dark min-h-screen flex items-center justify-center p-3 relative overflow-x-hidden;
+    }
+    
+    /* 主容器居中定位 */
+    #js-alert-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      z-index: 10;
+    }
+    
+    /* 安全检测动画 */
+    @keyframes securityCheck {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .security-check {
+      animation: securityCheck 0.5s ease-out forwards;
+    }
+    
+    /* 进度条动画 */
+    .progress-animation {
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    /* 小屏幕特别优化 */
+    @media (max-width: 360px) {
+      #js-alert-box {
+        max-width: 95%;
+        border-radius: 16px;
+      }
+      
+      .alert-btn {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 主容器 - 优化居中与自适应 -->
+  <div id="js-alert-box" class="alert-box bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl animate-fade-in">
+    
+    <!-- 内容区域 -->
+    <div class="p-5 md:p-7">
+      <h2 id="js-alert-head" class="text-[clamp(1.1rem,3vw,1.4rem)] font-bold text-center mb-3 md:mb-5 text-dark">安全验证</h2>
+      <div class="alert-concent text-center text-gray-600 mb-5 md:mb-7">
+        <p class="text-sm md:text-base">正在环境检测 提升访问安全</p>
       </div>
-      <div class="alert-body">
-        <div id="js-alert-head" class="alert-head">
-        </div>
-        <div class="alert-concent">
-          <p>安全检测 请等待...</p>
-        </div>
-        <!--<a id="js-alert-btn" class="alert-btn" href=">立即前往</a>-->
+      
+      <!-- 进度条 -->
+      <div class="w-full bg-gray-200 rounded-full h-3 mb-4 md:mb-6 overflow-hidden">
+        <div id="progress-bar" class="bg-gradient-to-r from-warning to-orange-500 h-3 rounded-full progress-animation" style="width: 0%"></div>
       </div>
-      <div class="alert-footer clearfix">
-        <svg width="46px" height="42px" class="alert-footer-icon">
-          <circle fill-rule="evenodd" clip-rule="evenodd" fill="#7B7B7B" stroke="#DEDFE0" stroke-width="2" stroke-miterlimit="10" cx="21.917" cy="21.25" r="17" />
-          <path fill="#FFF" d="M22.907,27.83h-1.98l0.3-2.92c-0.37-0.22-0.61-0.63-0.61-1.1c0-0.71,0.58-1.29,1.3-1.29s1.3,0.58,1.3,1.29 c0,0.47-0.24,0.88-0.61,1.1L22.907,27.83z M18.327,17.51c0-1.98,1.61-3.59,3.59-3.59s3.59,1.61,3.59,3.59v2.59h-7.18V17.51z M27.687,20.1v-2.59c0-3.18-2.59-5.76-5.77-5.76s-5.76,2.58-5.76,5.76v2.59h-1.24v10.65h14V20.1H27.687z" />
-          <circle fill-rule="evenodd" clip-rule="evenodd" fill="#FEFEFE" cx="35.417" cy="10.75" r="6.5" />
-          <polygon fill="#7B7B7B" stroke="#7B7B7B" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="35.417,12.16 32.797,9.03 31.917,10.07 35.417,14.25 42.917,5.29 42.037,4.25 " />
-        </svg>
-        <div class="alert-footer-text">
-          <p>secure</p>安全加密</div>
+      
+      <!-- 安全检测状态 -->
+      <div id="security-status" class="mb-5 md:mb-7 space-y-3">
+        <div class="security-check flex items-center" style="animation-delay: 0.1s">
+          <i class="fa fa-circle-o-notch fa-spin text-warning mr-2"></i>
+          <span>网络环境检测</span>
+        </div>
+        <div class="security-check flex items-center opacity-50" style="animation-delay: 0.3s">
+          <i class="fa fa-circle-o-notch fa-spin text-warning mr-2"></i>
+          <span>浏览器安全检测</span>
+        </div>
+        <div class="security-check flex items-center opacity-50" style="animation-delay: 0.5s">
+          <i class="fa fa-circle-o-notch fa-spin text-warning mr-2"></i>
+          <span>设备环境检测</span>
+        </div>
+      </div>
+      
+      <!-- 按钮 -->
+      <a id="js-alert-btn" href="https://lookresume.github.io" class="alert-btn block w-full py-3 md:py-4 px-6 bg-warning hover:bg-orange-400 text-white text-center rounded-xl text-base font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+        <i class="fa fa-spinner fa-spin mr-1"></i> 正在验证安全环境
+      </a>
+    </div>
+    
+    <!-- 页脚 -->
+    <div class="alert-footer bg-gray-50 border-t border-gray-200 py-3 px-4 flex items-center justify-center">
+      <div class="flex items-center">
+        <i class="fa fa-shield text-warning text-lg mr-2"></i>
+        <p class="text-sm text-gray-700">安全加密传输 · 实时环境监测</p>
       </div>
     </div>
-    <script type="text/javascript">function alertSet(e) {
-        document.getElementById("js-alert-box").style.display = "block",
-        document.getElementById("js-alert-head").innerHTML = e;
-        var t = 3,
-        n = document.getElementById("js-sec-circle");
-        document.getElementById("js-sec-text").innerHTML = t,
-        setInterval(function() {
-          if (0 == t) {
-            location.href = "https://lookresume.github.io";
-          } else {
-            t -= 1,
-            document.getElementById("js-sec-text").innerHTML = t;
-            var e = Math.round(t / 10 * 735);
-            n.style.strokeDashoffset = e - 735
-          }
-        },
-        970);
-      }</script>
-    <script>alertSet('');</script>
-  </body>
+  </div>
 
+  <script>
+    // 配置参数 true false
+    const config = {
+      autoRedirect: true,
+      redirectUrl: "https://lookresume.github.io",
+      redirectCountdown: 3, // 自动跳转倒计时秒数
+      securityChecks: [
+        { name: "网络环境检测", progress: 30 },
+        { name: "浏览器安全检测", progress: 70 },
+        { name: "设备环境检测", progress: 100 }
+      ]
+    };
+    
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 显示警报框
+      document.getElementById("js-alert-box").style.display = "block";
+      
+      // 元素引用
+      const progressBar = document.getElementById("progress-bar");
+      const securityStatus = document.getElementById("security-status");
+      const alertBtn = document.getElementById("js-alert-btn");
+      
+      // 安全检测状态项
+      let statusItems = securityStatus.querySelectorAll('div');
+      
+      // 更新进度条
+      function updateProgress(percentage) {
+        progressBar.style.width = `${percentage}%`;
+      }
+      
+      // 更新安全状态
+      function updateSecurityStatus(step) {
+        statusItems.forEach((item, index) => {
+          if (index < step) {
+            // 已完成步骤
+            item.querySelector('i').className = 'fa fa-check text-success mr-2';
+            item.classList.add('text-success', 'opacity-100');
+            item.classList.remove('opacity-50');
+          } else if (index === step) {
+            // 进行中步骤
+            item.querySelector('i').className = 'fa fa-circle-o-notch fa-spin text-warning mr-2';
+            item.classList.remove('opacity-50');
+          } else {
+            // 未开始步骤
+            item.classList.add('opacity-50');
+          }
+        });
+      }
+      
+      // 初始状态
+      updateSecurityStatus(0);
+      
+      // 模拟安全检测进度
+      let progress = 0;
+      let currentStep = 0;
+      const progressInterval = setInterval(() => {
+        progress += 4;
+        updateProgress(progress);
+        
+        // 检测是否进入下一步
+        while (currentStep < config.securityChecks.length && progress >= config.securityChecks[currentStep].progress) {
+          currentStep++;
+          updateSecurityStatus(currentStep);
+        }
+        
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+          completeSecurityCheck();
+        }
+      }, 70);
+      
+      // 完成安全检测
+      function completeSecurityCheck() {
+        // 添加完成动画
+        alertBtn.classList.remove('bg-warning', 'hover:bg-orange-400');
+        alertBtn.classList.add('bg-success', 'hover:bg-green-600');
+        
+        if (config.autoRedirect) {
+          startRedirectCountdown();
+        } else {
+          alertBtn.innerHTML = '<i class="fa fa-check mr-1"></i> 点击前往目标网站';
+        }
+      }
+      
+      // 开始跳转倒计时
+      function startRedirectCountdown() {
+        let countdown = config.redirectCountdown;
+        const countdownInterval = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            alertBtn.innerHTML = `验证成功，${countdown}秒后跳转...`;
+          } else {
+            clearInterval(countdownInterval);
+            location.href = config.redirectUrl;
+          }
+        }, 1000);
+      }
+      
+      // 优化的键盘事件监听
+      document.addEventListener('keydown', function(e) {
+        // 禁止F12调试工具
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          showSecurityAlert();
+        }
+        // 禁止Ctrl+S保存
+        if ((e.ctrlKey || e.metaKey) && e.keyCode === 83) {
+          e.preventDefault();
+          showSecurityAlert();
+        }
+      });
+      
+      // 禁止右键菜单（非输入区域）
+      document.addEventListener('contextmenu', function(e) {
+        if (!e.target.closest('input, textarea, button')) {
+          e.preventDefault();
+          showSecurityAlert();
+        }
+      });
+      
+      // 安全提示
+      function showSecurityAlert() {
+        const alertBox = document.createElement('div');
+        alertBox.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-danger text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in';
+        alertBox.textContent = '安全环境检测中，请勿进行调试操作';
+        document.body.appendChild(alertBox);
+        
+        setTimeout(() => {
+          alertBox.style.transition = 'opacity 0.5s';
+          alertBox.style.opacity = '0';
+          setTimeout(() => {
+            document.body.removeChild(alertBox);
+          }, 500);
+        }, 3000);
+      }
+    });
+  </script>
+</body>
 </html>
