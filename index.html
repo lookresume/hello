@@ -4,71 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>安全验证 - 页面跳转</title>
-  <!-- 引入外部资源 -->
-  <script src="tailwindcss.js"></script>
+  <!-- 引入Font Awesome图标 -->
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <!-- 配置Tailwind自定义样式 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#4AB0F7',
-            secondary: '#6BC2FF',
-            neutral: '#E6EAEB',
-            dark: '#242424',
-            light: '#F8F9FA',
-            success: '#22c55e',
-            warning: '#f59e0b',
-            danger: '#ef4444'
-          },
-          fontFamily: {
-            sans: ['Arial', 'Microsoft YaHei', 'SimSun', 'sans-serif']
-          },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'fade-in': 'fadeIn 0.5s ease-in-out',
-            'slide-up': 'slideUp 0.5s ease-out'
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' }
-            },
-            slideUp: {
-              '0%': { transform: 'translateY(20px)', opacity: '0' },
-              '100%': { transform: 'translateY(0)', opacity: '1' }
-            }
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- 自定义工具类 -->
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-      .backdrop-blur {
-        backdrop-filter: blur(8px);
-      }
-      .text-balance {
-        text-wrap: balance;
-      }
-    }
-  </style>
-  
   <style>
-    /* 基础样式 */
-    body {
-      @apply bg-gradient-to-br from-neutral to-gray-200 font-sans text-dark min-h-screen flex items-center justify-center p-3 relative overflow-x-hidden;
+    /* 基础样式定义 */
+    :root {
+      --primary: #4AB0F7;
+      --secondary: #6BC2FF;
+      --neutral: #E6EAEB;
+      --dark: #242424;
+      --light: #F8F9FA;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
     }
-    
-    /* 主容器居中定位 */
-    #js-alert-box {
+
+    /* 全局样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', 'Microsoft YaHei', 'SimSun', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to-br, var(--neutral), #e0e7eb);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 主容器样式 */
+    .alert-box {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -76,33 +49,165 @@
       width: 90%;
       max-width: 400px;
       z-index: 10;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.5s ease;
+      animation: fadeIn 0.5s ease-in-out;
     }
-    
-    /* 安全检测动画 */
-    @keyframes securityCheck {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
+
+    .alert-box:hover {
+      box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 15px -5px rgba(0, 0, 0, 0.1);
     }
-    
-    .security-check {
+
+    /* 内容区域样式 */
+    .alert-content {
+      padding: 30px;
+    }
+
+    .alert-title {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .alert-message {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 25px;
+      font-size: 15px;
+    }
+
+    /* 进度条样式 */
+    .progress-container {
+      width: 100%;
+      background: #e5e7eb;
+      border-radius: 16px;
+      height: 6px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 16px;
+      background: linear-gradient(90deg, var(--warning), #f97316);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    /* 安全检测状态样式 */
+    .security-status {
+      margin-bottom: 25px;
+    }
+
+    .security-check-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
       animation: securityCheck 0.5s ease-out forwards;
     }
-    
-    /* 进度条动画 */
-    .progress-animation {
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+    .security-check-item i {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .security-check-item span {
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    /* 按钮样式 */
+    .alert-button {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: var(--warning);
+      color: white;
+      text-align: center;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+
+    .alert-button:hover {
+      background: #f97316;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
     
-    /* 小屏幕特别优化 */
+    .alert-button-success {
+      background: var(--success);
+    }
+    
+    .alert-button-success:hover {
+      background: #16a34a;
+    }
+
+    /* 页脚样式 */
+    .alert-footer {
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-text {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .footer-text i {
+      color: var(--warning);
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    /* 动画定义 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes securityCheck {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseSlow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .pulse-animation {
+      animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* 小屏幕优化 */
     @media (max-width: 360px) {
-      #js-alert-box {
+      .alert-box {
         max-width: 95%;
         border-radius: 16px;
       }
-      
-      .alert-btn {
-        padding: 12px 15px;
-        font-size: 0.9rem;
+
+      .alert-content {
+        padding: 20px;
+      }
+
+      .alert-button {
+        padding: 12px;
+        font-size: 14px;
       }
     }
   </style>
@@ -110,53 +215,53 @@
 
 <body>
   <!-- 主容器 - 优化居中与自适应 -->
-  <div id="js-alert-box" class="alert-box bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl animate-fade-in">
+  <div class="alert-box">
     
     <!-- 内容区域 -->
-    <div class="p-5 md:p-7">
-      <h2 id="js-alert-head" class="text-[clamp(1.1rem,3vw,1.4rem)] font-bold text-center mb-3 md:mb-5 text-dark">安全验证</h2>
-      <div class="alert-concent text-center text-gray-600 mb-5 md:mb-7">
-        <p class="text-sm md:text-base">正在环境检测 提升访问安全</p>
+    <div class="alert-content">
+      <h2 class="alert-title">安全验证</h2>
+      <div class="alert-message">
+        <p>正在环境检测 提升访问安全</p>
       </div>
       
       <!-- 进度条 -->
-      <div class="w-full bg-gray-200 rounded-full h-3 mb-4 md:mb-6 overflow-hidden">
-        <div id="progress-bar" class="bg-gradient-to-r from-warning to-orange-500 h-3 rounded-full progress-animation" style="width: 0%"></div>
+      <div class="progress-container mb-8">
+        <div class="progress-bar" id="progressBar"></div>
       </div>
       
       <!-- 安全检测状态 -->
-      <div id="security-status" class="mb-5 md:mb-7 space-y-3">
-        <div class="security-check flex items-center" style="animation-delay: 0.1s">
+      <div class="security-status mb-8 space-y-4">
+        <div class="security-check-item" style="animation-delay: 0.1s">
           <i class="fa fa-circle-o-notch fa-spin text-warning mr-2"></i>
           <span>网络环境检测</span>
         </div>
-        <div class="security-check flex items-center opacity-50" style="animation-delay: 0.3s">
+        <div class="security-check-item flex items-center opacity-50" style="animation-delay: 0.3s">
           <i class="fa fa-circle-o-notch fa-spin text-warning mr-2"></i>
           <span>浏览器安全检测</span>
         </div>
-        <div class="security-check flex items-center opacity-50" style="animation-delay: 0.5s">
+        <div class="security-check-item flex items-center opacity-50" style="animation-delay: 0.5s">
           <i class="fa fa-circle-o-notch fa-spin text-warning mr-2"></i>
           <span>设备环境检测</span>
         </div>
       </div>
       
       <!-- 按钮 -->
-      <a id="js-alert-btn" href="https://lookresume.github.io" class="alert-btn block w-full py-3 md:py-4 px-6 bg-warning hover:bg-orange-400 text-white text-center rounded-xl text-base font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+      <a href="https://lookresume.github.io" class="alert-button" id="alertButton">
         <i class="fa fa-spinner fa-spin mr-1"></i> 正在验证安全环境
       </a>
     </div>
     
     <!-- 页脚 -->
-    <div class="alert-footer bg-gray-50 border-t border-gray-200 py-3 px-4 flex items-center justify-center">
-      <div class="flex items-center">
-        <i class="fa fa-shield text-warning text-lg mr-2"></i>
-        <p class="text-sm text-gray-700">安全加密传输 · 实时环境监测</p>
+    <div class="alert-footer">
+      <div class="footer-text">
+        <i class="fa fa-shield"></i>
+        <p>安全加密传输 · 实时环境监测</p>
       </div>
     </div>
   </div>
 
   <script>
-    // 配置参数 true false
+    // 配置参数
     const config = {
       autoRedirect: true,
       redirectUrl: "https://lookresume.github.io",
@@ -170,16 +275,13 @@
     
     // 页面加载完成后执行
     document.addEventListener('DOMContentLoaded', function() {
-      // 显示警报框
-      document.getElementById("js-alert-box").style.display = "block";
-      
       // 元素引用
-      const progressBar = document.getElementById("progress-bar");
-      const securityStatus = document.getElementById("security-status");
-      const alertBtn = document.getElementById("js-alert-btn");
+      const progressBar = document.getElementById("progressBar");
+      const securityStatus = document.querySelector(".security-status");
+      const alertButton = document.getElementById("alertButton");
       
       // 安全检测状态项
-      let statusItems = securityStatus.querySelectorAll('div');
+      let statusItems = securityStatus.querySelectorAll('.security-check-item');
       
       // 更新进度条
       function updateProgress(percentage) {
@@ -230,13 +332,13 @@
       // 完成安全检测
       function completeSecurityCheck() {
         // 添加完成动画
-        alertBtn.classList.remove('bg-warning', 'hover:bg-orange-400');
-        alertBtn.classList.add('bg-success', 'hover:bg-green-600');
+        alertButton.classList.remove('bg-warning');
+        alertButton.classList.add('bg-success', 'alert-button-success');
         
         if (config.autoRedirect) {
           startRedirectCountdown();
         } else {
-          alertBtn.innerHTML = '<i class="fa fa-check mr-1"></i> 点击前往目标网站';
+          alertButton.innerHTML = '<i class="fa fa-check mr-1"></i> 点击前往目标网站';
         }
       }
       
@@ -246,7 +348,7 @@
         const countdownInterval = setInterval(() => {
           countdown--;
           if (countdown > 0) {
-            alertBtn.innerHTML = `验证成功，${countdown}秒后跳转...`;
+            alertButton.innerHTML = `验证成功，${countdown}秒后跳转...`;
           } else {
             clearInterval(countdownInterval);
             location.href = config.redirectUrl;
@@ -279,7 +381,8 @@
       // 安全提示
       function showSecurityAlert() {
         const alertBox = document.createElement('div');
-        alertBox.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-danger text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in';
+        alertBox.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-danger text-white px-4 py-2 rounded shadow-lg z-50';
+        alertBox.style.animation = 'fadeIn 0.5s ease-in-out';
         alertBox.textContent = '安全环境检测中，请勿进行调试操作';
         document.body.appendChild(alertBox);
         
